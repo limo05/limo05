@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="yanm1ng&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      计步/跑步算法 | LIMO
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>LIMO</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">Home</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/series/" class="item-link">Series</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags/" class="item-link">Tags</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives/" class="item-link">Archives</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project/" class="item-link">Projects</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about/" class="item-link">About</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">Home</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/series/" class="menu-link">Series</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags/" class="menu-link">Tags</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives/" class="menu-link">Archives</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project/" class="menu-link">Projects</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about/" class="menu-link">About</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>计步/跑步算法</h2>
+  <p class="post-date">2024-04-23</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p><a href="mailto:shengyong.li@tcl.com">作者：李盛永</a></p>
+<h3 id="一、走路情景"><a href="#一、走路情景" class="headerlink" title="一、走路情景"></a>一、走路情景</h3><p><img src="/2024/04/23/%E8%AE%A1%E6%AD%A5%E7%AE%97%E6%B3%95/1.jpg"></p>
+<h3 id="二、计步原理"><a href="#二、计步原理" class="headerlink" title="二、计步原理"></a>二、计步原理</h3><p>主要构件都是3轴重力加速度仪，因此基本原理是检测物体重心的移动造成的颠簸来计算步数。</p>
+<h3 id="三、采集数据"><a href="#三、采集数据" class="headerlink" title="三、采集数据"></a>三、采集数据</h3><p>可以在手机上安装accelerometer或者G-Sensor Pro，就可以看到三轴加速度器的数据。</p>
+<p><img src="/2024/04/23/%E8%AE%A1%E6%AD%A5%E7%AE%97%E6%B3%95/70177a16gx6BSgr3MLMea&690.jpg"></p>
+<p>比如，我用某个APP跑了一段，大概十秒的样子，一共28步。得到了上面的波形，大家可以数一下波峰波谷，可以发现大约有27-28个波峰波谷。</p>
+<h3 id="四、实现方法"><a href="#四、实现方法" class="headerlink" title="四、实现方法"></a>四、实现方法</h3><p>波峰检测法是一种将波峰检测计步算法和自相关分析计步算法相结合的判断姿态的方法，通过单轴加速度和固定阈值对不同的运动状态进行判断。该算法利用波峰检测计步算法中不同姿态的幅值和步频不同，再利用相应的阈值区间判断运动姿态，下图为自适应波峰检测算法流程图。</p>
+<p>![2020-02-12 11-17-53屏幕截图](计步算法&#x2F;2020-02-12 11-17-53屏幕截图.png)</p>
+<h3 id="五、排错机制"><a href="#五、排错机制" class="headerlink" title="五、排错机制"></a>五、排错机制</h3><p>我们日常生活中挥挥手可能也会产生类似的波动，坐海盗船，乘车都有可能。根据了正常人类的行为做了一些排错机制，一般排错机制包括：</p>
+<ol>
+<li><p>人如果走起来了，一般会连续多走几步。因此，如果没有连续4-5个波动，那么就极大可能是干扰。</p>
+</li>
+<li><p>人走动的波动，比坐车产生的波动要大，因此可以看波峰波谷的高度，只检测高于某个高度的波峰波谷。</p>
+</li>
+<li><p>人的反射神经决定了人快速动的极限，怎么都不可能两步之间小于0.2秒，因此小于0.2秒的波峰波谷直接跳过。</p>
+</li>
+</ol>
+<h3 id="六、能量消耗"><a href="#六、能量消耗" class="headerlink" title="六、能量消耗"></a>六、能量消耗</h3><p>表 1.1 不同走路速度的能量消耗</p>
+<table>
+<thead>
+<tr>
+<th>走的速度感</th>
+<th>时速</th>
+<th>消耗300大卡需要时间</th>
+<th>每分钟消耗热量</th>
+<th>燃烧一公斤脂肪所需分钟数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>蹒跚地走</td>
+<td>3.0</td>
+<td>110min</td>
+<td>2.7大卡</td>
+<td>2852</td>
+</tr>
+<tr>
+<td>缓慢地走</td>
+<td>3.6</td>
+<td>100min</td>
+<td>3.0大卡</td>
+<td>2567</td>
+</tr>
+<tr>
+<td>自然的走</td>
+<td>4.5</td>
+<td>90min</td>
+<td>3.3大卡</td>
+<td>2333</td>
+</tr>
+<tr>
+<td>快步走</td>
+<td>5.4</td>
+<td>70min</td>
+<td>4.2大卡</td>
+<td>1833</td>
+</tr>
+<tr>
+<td>全力走</td>
+<td>7.2</td>
+<td>38min</td>
+<td>7.9大卡</td>
+<td>975</td>
+</tr>
+<tr>
+<td>慢跑</td>
+<td>6.5</td>
+<td>55min</td>
+<td>5.5大卡</td>
+<td>1400</td>
+</tr>
+</tbody></table>
+<p>每个人在能量消耗时，究竟消耗掉的是糖分还是脂肪，这取决于运动强度。进行低强度运动时，人体以消耗脂肪为主，因为低强度有氧运动会增加肌肉中的脂肪分解酶。在进行高强度运动时，肌肉中的糖分分解酶会增加人体消耗的是糖分。</p>
+<p><img src="/2024/04/23/%E8%AE%A1%E6%AD%A5%E7%AE%97%E6%B3%95/ced572e336d0434d80a2a5ffd9f7f82e.jpeg"></p>
+<h3 id="七、安卓计步器"><a href="#七、安卓计步器" class="headerlink" title="七、安卓计步器"></a>七、安卓计步器</h3><p>在Android4.4 Kitkat 之后，谷歌新增了 <a target="_blank" rel="noopener" href="https://developer.android.google.cn/guide/topics/sensors/sensors_motion.html#sensors-motion-stepcounter">Step Counter Sensor</a> 以及 <a target="_blank" rel="noopener" href="https://developer.android.google.cn/guide/topics/sensors/sensors_motion.html#sensors-motion-stepdetector">Step Detector Sensor</a> 用于Android 计步。</p>
+<p>​																									<em>创建人：李盛永   日期：2020&#x2F;02&#x2F;14</em>																						</p>
+</section>
+    <!-- Tags START -->
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2024/04/23/hello-world/">
+        <span class="nav-arrow">← </span>
+        
+          Hello World
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%80%E3%80%81%E8%B5%B0%E8%B7%AF%E6%83%85%E6%99%AF"><span class="toc-nav-text">一、走路情景</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BA%8C%E3%80%81%E8%AE%A1%E6%AD%A5%E5%8E%9F%E7%90%86"><span class="toc-nav-text">二、计步原理</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%89%E3%80%81%E9%87%87%E9%9B%86%E6%95%B0%E6%8D%AE"><span class="toc-nav-text">三、采集数据</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-nav-text">四、实现方法</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%BA%94%E3%80%81%E6%8E%92%E9%94%99%E6%9C%BA%E5%88%B6"><span class="toc-nav-text">五、排错机制</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%85%AD%E3%80%81%E8%83%BD%E9%87%8F%E6%B6%88%E8%80%97"><span class="toc-nav-text">六、能量消耗</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%83%E3%80%81%E5%AE%89%E5%8D%93%E8%AE%A1%E6%AD%A5%E5%99%A8"><span class="toc-nav-text">七、安卓计步器</span></a></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://example.com/2024/04/23/计步算法/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2024 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/yanm1ng">yanm1ng</a>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>
