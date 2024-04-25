@@ -13,7 +13,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>计步/跑步算法 |  LIMO</title>
+      <title>文章分类 |  LIMO</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -55,8 +55,8 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-计步算法"
-  class="article article-type-post"
+  id="page-"
+  class="article article-type-page"
   itemscope
   itemprop="blogPost"
   data-scroll-reveal
@@ -66,126 +66,16 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  计步/跑步算法
+  文章分类
 </h1>
  
 
       
     </header>
-     
-    <div class="article-meta">
-      <a href="/2024/04/23/%E8%AE%A1%E6%AD%A5%E7%AE%97%E6%B3%95/" class="article-date">
-  <time datetime="2024-04-23T08:05:24.227Z" itemprop="datePublished">2024-04-23</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-  </div>
-  
-<div class="word_count">
-    <span class="post-time">
-        <span class="post-meta-item-icon">
-            <i class="ri-quill-pen-line"></i>
-            <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">741</span>
-        </span>
-    </span>
-
-    <span class="post-time">
-        &nbsp; | &nbsp;
-        <span class="post-meta-item-icon">
-            <i class="ri-book-open-line"></i>
-            <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">2 分钟</span>
-        </span>
-    </span>
-</div>
- 
-    </div>
-      
-    <div class="tocbot"></div>
-
-
-
-
-  
+       
     <div class="article-entry" itemprop="articleBody">
        
-  <p><a href="mailto:shengyong.li@tcl.com">作者：李盛永</a></p>
-<h3 id="一、走路情景"><a href="#一、走路情景" class="headerlink" title="一、走路情景"></a>一、走路情景</h3><p><img src="/2024/04/23/%E8%AE%A1%E6%AD%A5%E7%AE%97%E6%B3%95/1.jpg"></p>
-<h3 id="二、计步原理"><a href="#二、计步原理" class="headerlink" title="二、计步原理"></a>二、计步原理</h3><p>主要构件都是3轴重力加速度仪，因此基本原理是检测物体重心的移动造成的颠簸来计算步数。</p>
-<h3 id="三、采集数据"><a href="#三、采集数据" class="headerlink" title="三、采集数据"></a>三、采集数据</h3><p>可以在手机上安装accelerometer或者G-Sensor Pro，就可以看到三轴加速度器的数据。</p>
-<p><img src="/2024/04/23/%E8%AE%A1%E6%AD%A5%E7%AE%97%E6%B3%95/70177a16gx6BSgr3MLMea&690.jpg"></p>
-<p>比如，我用某个APP跑了一段，大概十秒的样子，一共28步。得到了上面的波形，大家可以数一下波峰波谷，可以发现大约有27-28个波峰波谷。</p>
-<h3 id="四、实现方法"><a href="#四、实现方法" class="headerlink" title="四、实现方法"></a>四、实现方法</h3><p>波峰检测法是一种将波峰检测计步算法和自相关分析计步算法相结合的判断姿态的方法，通过单轴加速度和固定阈值对不同的运动状态进行判断。该算法利用波峰检测计步算法中不同姿态的幅值和步频不同，再利用相应的阈值区间判断运动姿态，下图为自适应波峰检测算法流程图。</p>
-<p>![2020-02-12 11-17-53屏幕截图](计步算法&#x2F;2020-02-12 11-17-53屏幕截图.png)</p>
-<h3 id="五、排错机制"><a href="#五、排错机制" class="headerlink" title="五、排错机制"></a>五、排错机制</h3><p>我们日常生活中挥挥手可能也会产生类似的波动，坐海盗船，乘车都有可能。根据了正常人类的行为做了一些排错机制，一般排错机制包括：</p>
-<ol>
-<li><p>人如果走起来了，一般会连续多走几步。因此，如果没有连续4-5个波动，那么就极大可能是干扰。</p>
-</li>
-<li><p>人走动的波动，比坐车产生的波动要大，因此可以看波峰波谷的高度，只检测高于某个高度的波峰波谷。</p>
-</li>
-<li><p>人的反射神经决定了人快速动的极限，怎么都不可能两步之间小于0.2秒，因此小于0.2秒的波峰波谷直接跳过。</p>
-</li>
-</ol>
-<h3 id="六、能量消耗"><a href="#六、能量消耗" class="headerlink" title="六、能量消耗"></a>六、能量消耗</h3><p>表 1.1 不同走路速度的能量消耗</p>
-<table>
-<thead>
-<tr>
-<th>走的速度感</th>
-<th>时速</th>
-<th>消耗300大卡需要时间</th>
-<th>每分钟消耗热量</th>
-<th>燃烧一公斤脂肪所需分钟数</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>蹒跚地走</td>
-<td>3.0</td>
-<td>110min</td>
-<td>2.7大卡</td>
-<td>2852</td>
-</tr>
-<tr>
-<td>缓慢地走</td>
-<td>3.6</td>
-<td>100min</td>
-<td>3.0大卡</td>
-<td>2567</td>
-</tr>
-<tr>
-<td>自然的走</td>
-<td>4.5</td>
-<td>90min</td>
-<td>3.3大卡</td>
-<td>2333</td>
-</tr>
-<tr>
-<td>快步走</td>
-<td>5.4</td>
-<td>70min</td>
-<td>4.2大卡</td>
-<td>1833</td>
-</tr>
-<tr>
-<td>全力走</td>
-<td>7.2</td>
-<td>38min</td>
-<td>7.9大卡</td>
-<td>975</td>
-</tr>
-<tr>
-<td>慢跑</td>
-<td>6.5</td>
-<td>55min</td>
-<td>5.5大卡</td>
-<td>1400</td>
-</tr>
-</tbody></table>
-<p>每个人在能量消耗时，究竟消耗掉的是糖分还是脂肪，这取决于运动强度。进行低强度运动时，人体以消耗脂肪为主，因为低强度有氧运动会增加肌肉中的脂肪分解酶。在进行高强度运动时，肌肉中的糖分分解酶会增加人体消耗的是糖分。</p>
-<p><img src="/2024/04/23/%E8%AE%A1%E6%AD%A5%E7%AE%97%E6%B3%95/ced572e336d0434d80a2a5ffd9f7f82e.jpeg"></p>
-<h3 id="七、安卓计步器"><a href="#七、安卓计步器" class="headerlink" title="七、安卓计步器"></a>七、安卓计步器</h3><p>在Android4.4 Kitkat 之后，谷歌新增了 <a target="_blank" rel="noopener" href="https://developer.android.google.cn/guide/topics/sensors/sensors_motion.html#sensors-motion-stepcounter">Step Counter Sensor</a> 以及 <a target="_blank" rel="noopener" href="https://developer.android.google.cn/guide/topics/sensors/sensors_motion.html#sensors-motion-stepdetector">Step Detector Sensor</a> 用于Android 计步。</p>
-<p>​																									<em>创建人：李盛永   日期：2020&#x2F;02&#x2F;14</em>																						</p>
- 
+   
       <!-- reward -->
       
     </div>
@@ -249,39 +139,18 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2024/04/23/%E8%AE%A1%E6%AD%A5%E7%AE%97%E6%B3%95/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/tags/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%89%8B%E8%A1%A8/" rel="tag">手表</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E5%8A%A8/" rel="tag">运动</a></li></ul>
-
     </footer>
   </div>
 
    
-  <nav class="article-nav">
-    
-    
-      <a href="/2024/04/23/hello-world/" class="article-nav-link">
-        <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">Hello World</div>
-      </a>
-    
-  </nav>
-
   
    
   
-   
-    <script src="https://cdn.staticfile.org/twikoo/1.4.18/twikoo.all.min.js"></script>
-    <div id="twikoo" class="twikoo"></div>
-    <script>
-        twikoo.init({
-            envId: ""
-        })
-    </script>
- 
 </article>
 
 </section>
@@ -418,22 +287,6 @@
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
- 
-<script src="/js/tocbot.min.js"></script>
-
-<script>
-  tocbot.init({
-    tocSelector: ".tocbot",
-    contentSelector: ".article-entry",
-    headingSelector: "h1, h2, h3, h4, h5, h6",
-    hasInnerContainers: true,
-    scrollSmooth: true,
-    scrollContainer: "main",
-    positionFixedSelector: ".tocbot",
-    positionFixedClass: "is-position-fixed",
-    fixedSidebarOffset: "auto",
-  });
-</script>
 
 <script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
 <link
